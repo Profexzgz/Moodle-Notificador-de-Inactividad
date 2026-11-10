@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "FP Virtual - Notificador de Inactividad",
+  "version": "2.0",
+  "description": "Automatiza el envío de correos a estudiantes con inactividad en FP Virtual.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "scripting",
+    "sidePanel"
+  ],
+  "host_permissions": [
+    "https://www.fpvirtualaragon.es/*"
+  ],
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": {
+    "default_title": "Abrir panel de envío de correo",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.fpvirtualaragon.es/private-reports/docentes.php*",
+        "https://www.fpvirtualaragon.es/local/mail/view.php*"
+      ],
+      "js": ["content.js"]
+    }
+  ]
+}

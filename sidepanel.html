@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 14px;
+      margin: 0;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #5d48d0;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .header h2 {
+      font-size: 15px;
+      margin: 0;
+      color: #2c3e50;
+    }
+    .notice {
+      background-color: #e8f4fd;
+      border-left: 4px solid #2980b9;
+      padding: 8px;
+      font-size: 11px;
+      margin-bottom: 12px;
+      border-radius: 2px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #444;
+    }
+    select, input[type="text"], textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 7px;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+    select:disabled {
+      background-color: #eee;
+      cursor: not-allowed;
+    }
+    textarea {
+      height: 90px;
+      resize: vertical;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      background: #edf2f7;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+    }
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .checkbox-group label {
+      margin-bottom: 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+      cursor: pointer;
+    }
+    button {
+      width: 100%;
+      background-color: #5d48d0;
+      color: white;
+      border: none;
+      padding: 9px;
+      font-size: 13px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #4937a5;
+    }
+    button.btn-stop {
+      background-color: #e74c3c;
+    }
+    button.btn-stop:hover {
+      background-color: #c0392b;
+    }
+
+    .debug-container {
+      margin-top: 14px;
+    }
+    .debug-title {
+      font-size: 11px;
+      font-weight: bold;
+      color: #495057;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .debug-box {
+      background-color: #0f172a;
+      color: #38bdf8;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 11px;
+      padding: 10px;
+      border-radius: 6px;
+      height: 110px;
+      overflow-y: auto;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .log-line {
+      margin-bottom: 4px;
+      word-break: break-all;
+    }
+    .log-success { color: #4ade80; }
+    .log-warn { color: #facc15; }
+    .log-error { color: #f87171; }
+
+    .debug-tools {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .btn-debug {
+      flex: 1;
+      background-color: #475569;
+      color: #fff;
+      font-size: 10px;
+      padding: 6px 4px;
+      font-weight: normal;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-debug:hover {
+      background-color: #334155;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>FP Virtual - Notificador de Inactividad</h2>
+  </div>
+
+  <div class="notice">
+    ⚠️ <strong>Aviso:</strong> Debes estar identificado en <a href="https://www.fpvirtualaragon.es" target="_blank">FP Virtual</a>.
+  </div>
+
+  <div class="form-group">
+    <label for="courseSelect">Selector de cursos:</label>
+    <select id="courseSelect">
+      <!-- Cursos listados dinámicamente -->
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="accessSelect">Estado de acceso:</label>
+    <select id="accessSelect">
+      <option value="no_access" selected>Sin acceder al curso</option>
+      <option value="never">Nunca han accedido</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="daysSelect">Días de inactividad:</label>
+    <select id="daysSelect">
+      <option value="10" selected>Más de 10 días</option>
+      <option value="7">Entre 7 y 10 días</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="messageText">Mensaje a enviar:</label>
+    <textarea id="messageText">Buenos días,
+
+En el módulo de [NombreDelMódulo] se ha detectado falta de actividad por un periodo superior a 10 días, recuerda que es importante que entres al curso desde la plataforma de forma frecuente para que no se inicie el proceso de baja en el mismo. Por tanto, te recomendamos que, tras la recepción de este mensaje, accedas al curso lo antes posible para que conste en el sistema.
+
+Gracias y un saludo</textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="subjectText">Asunto:</label>
+    <input type="text" id="subjectText" value="Falta de actividad por un periodo superior a 10 días">
+  </div>
+
+  <div class="checkbox-group">
+    <input type="checkbox" id="autoSendCheck">
+    <label for="autoSendCheck">Enviar sin revisar</label>
+  </div>
+
+  <button id="btnStart">Enviar correo</button>
+
+  <!-- SECCIÓN DE DEBUGGING -->
+  <div class="debug-container">
+    <div class="debug-title">LOGS DE DEBUGGING:</div>
+    <div id="debugBox" class="debug-box">
+      <div class="log-line log-success">[Sistema] Panel inicializado.</div>
+    </div>
+    <div class="debug-tools">
+      <button id="btnDownloadHTML" class="btn-debug">📥 HTML Página</button>
+      <button id="btnCopyDOM" class="btn-debug">📋 Selectores</button>
+      <button id="btnDownloadLogs" class="btn-debug">📄 Descargar Logs</button>
+    </div>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
